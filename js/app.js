@@ -1,18 +1,31 @@
-function updateClock() {
-    const now = new Date();
+let timer;
+let seconds = 0;
 
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-    const formattedDate = now.toLocaleString('es-ES', options);
-
-    const hourOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit'}
-    const formattedHour = now.toLocaleTimeString("es-ES", hourOptions)
-
-    document.getElementById('clock').textContent = formattedDate;
-    document.getElementById('time').textContent = formattedHour;
+function startTimer() {
+    timer = setInterval(updateTimer, 1000);
 }
 
+function pauseTimer() {
+    clearInterval(timer);
+}
 
-setInterval(updateClock, 1000);
+function resetTimer() {
+    clearInterval(timer);
+    seconds = 0;
+    updateTimer();
+}
 
+function updateTimer() {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
 
-updateClock();
+    const formattedTime = `${padZero(hours)}:${padZero(minutes)}:${padZero(remainingSeconds)}`;
+    document.getElementById('timer').innerText = formattedTime;
+
+    seconds++;
+}
+
+function padZero(number) {
+    return number < 10 ? `0${number}` : number;
+}
